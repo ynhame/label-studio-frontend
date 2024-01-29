@@ -119,7 +119,30 @@ const InfoTab: FC<any> = inject('store')(
       <>
         <Block name="info">
           <Elem name="section-tab">
-            <Elem name="section-head">Selection Details</Elem>
+            <Elem name="section-head">
+
+              <button onClick={console.log('1Hello World')}>oi</button>
+              Selection Details
+            </Elem>
+            <RegionsPanel regions={selection}/>
+          </Elem>
+        </Block>
+      </>
+    );
+  }),
+);
+
+const GraphsTab: FC<any> = inject('store')(
+  observer(({ selection }) => {
+    return (
+      <>
+        <Block name="Graphs">
+          <Elem name="section-tab">
+            <Elem name="section-head">
+
+              <button onClick={console.log('2Hello World')}>oi2</button>
+              Graphs Pannel
+            </Elem>
             <RegionsPanel regions={selection}/>
           </Elem>
         </Block>
@@ -214,3 +237,4 @@ export const Relations = observer(RelationsTab);
 export const Info = observer(InfoTab);
 export const Details = observer(DetailsComponent);
 export const DetailsPanel = observer(DetailsPanelComponent);
+export const Graphs = observer(GraphsTab);

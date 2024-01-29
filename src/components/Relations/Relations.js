@@ -143,6 +143,7 @@ const RelationsComponent = ({ store }) => {
       {/* override LS styles' height */}
       <Elem name="header">
         <Elem name="title">Relations ({relations.length})</Elem>
+          <button onClick={console.log('Hello World')}>'oi'</button>
         {hasRelations && (
           <Button
             size="small"

@@ -1,7 +1,7 @@
 import { FC, MutableRefObject, ReactNode } from 'react';
 import { clamp } from '../../../utils/utilities';
 import { DEFAULT_PANEL_HEIGHT, DEFAULT_PANEL_MAX_HEIGHT, DEFAULT_PANEL_MAX_WIDTH, DEFAULT_PANEL_MIN_HEIGHT, DEFAULT_PANEL_WIDTH, PANEL_HEADER_HEIGHT } from '../constants';
-import { Comments, History, Info, Relations } from '../DetailsPanel/DetailsPanel';
+import { Comments, History, Info, Relations, Graphs} from '../DetailsPanel/DetailsPanel';
 import { OutlinerComponent } from '../OutlinerPanel/OutlinerPanel';
 import { PanelProps } from '../PanelBase';
 import { emptyPanel, JoinOrder, PanelBBox, PanelsCollapsed, PanelView, Side, StoredPanelState, ViewportSize } from './types';
@@ -104,6 +104,7 @@ export const stateRemovePanelEmptyViews = (state: Record<string, PanelBBox> | nu
 
 export const panelComponents: {[key:string]: FC<PanelProps>} = {
   'regions': OutlinerComponent as FC<PanelProps>,
+  'graphs': Graphs as FC<PanelProps>,
   'history': History as FC<PanelProps>,
   'relations': Relations as FC<PanelProps>,
   'comments': Comments as FC<PanelProps>,
@@ -116,6 +117,12 @@ const panelViews = [
     title: 'Regions',
     component: panelComponents['regions'] as FC<PanelProps>,
     active: true,
+  },
+  {
+    name: 'graphs',
+    title: 'graphs',
+    component: panelComponents['graphs'] as FC<PanelProps>,
+    active: false,
   },
   {
     name: 'history',
@@ -178,7 +185,7 @@ export const enterprisePanelDefault: Record<string, PanelBBox> = {
 };
 
 export const openSourcePanelDefault: Record<string, PanelBBox> = {
-  'info-history': {
+  'info-history-graphs': {
     order: 1,
     top: 0,
     left: 0,
