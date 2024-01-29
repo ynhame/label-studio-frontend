@@ -1,0 +1,9 @@
+* Importan Files
+** src/components/SidePanels/DetailsPanel/DetailsPanel.tsx
+   File that have the panels components
+     The Graphs Component was created here
+** src/components/SidePanels/TabPanels.utils.ts
+   File that indicates witch Panel components should be loaded
+      The Graphs Component was added here
+** src/core/Tree.tsx
+   File that has the parsing of the TAGS HTML logic
