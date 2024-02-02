@@ -188,13 +188,20 @@ const GraphsTab: FC<any> = inject('store')(
       ["2022-12-28",  99]
     ]
 
-      const data = [
+      /* const data = [
         {Date: new Date("2013-05-13"), Open: 64.501427, High: 65.414284, Low: 64.500000, Close: 64.962860, Volume: 79237200},
         {Date: new Date("2013-05-14"), Open: 64.835716, High: 65.028572, Low: 63.164288, Close: 63.408573, Volume: 111779500},
         {Date: new Date("2013-05-15"), Open: 62.737144, High: 63.000000, Low: 60.337143, Close: 61.264286, Volume: 185403400},
         {Date: new Date("2013-05-16"), Open: 60.462856, High: 62.549999, Low: 59.842857, Close: 62.082859, Volume: 150801000},
         {Date: new Date("2013-05-17"), Open: 62.721428, High: 62.869999, Low: 61.572857, Close: 61.894287, Volume: 106976100}
-      ];
+      ]; */
+
+
+    const data = {
+      date: plot_data.map(e => e[0]),
+      value: plot_data.map(e => e[1]),
+    }
+
     // const zip = (a: Array<string>, b: Array<number>) => a.map((k, i) => {date:new Date(k); value: b[i]});
     //
     // const plot_data2 = zip(plot_data.x, plot_data.y);
@@ -210,18 +217,6 @@ const GraphsTab: FC<any> = inject('store')(
               graphs pannel
             </Elem>
             <RegionsPanel regions={selection}/>
-            <Plot
-              data={[
-                {
-                  x: plot_data.map((e) => e[0]),
-                  y: plot_data.map((e) => e[1]),
-                  type: 'scatter',
-                  mode: 'lines+markers',
-                  marker: { color: 'red' },
-                },
-              ]}
-              layout={ { title: 'A Fancy Plot' } }
-            />
             <Graph data={data}/>
           </Elem>
         </Block>
