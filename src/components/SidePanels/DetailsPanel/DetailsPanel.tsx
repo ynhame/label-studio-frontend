@@ -222,7 +222,7 @@ const GraphsTab: FC<any> = inject('store')(
               ]}
               layout={ { title: 'A Fancy Plot' } }
             />
-            <Graph data={plot_data}/>
+            <Graph data={data}/>
           </Elem>
         </Block>
       </>
