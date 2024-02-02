@@ -9,6 +9,9 @@ import './DetailsPanel.styl';
 import { RegionDetailsMain, RegionDetailsMeta } from './RegionDetails';
 import { RegionItem } from './RegionItem';
 import { Relations as RelationsComponent } from './Relations';
+import Graph from './Graphs'
+import Plot from 'react-plotly.js';
+
 // eslint-disable-next-line
 // @ts-ignore
 import { DraftPanel } from '../../DraftPanel/DraftPanel';
@@ -120,8 +123,6 @@ const InfoTab: FC<any> = inject('store')(
         <Block name="info">
           <Elem name="section-tab">
             <Elem name="section-head">
-
-              <button onClick={console.log('1Hello World')}>oi</button>
               Selection Details
             </Elem>
             <RegionsPanel regions={selection}/>
@@ -134,16 +135,94 @@ const InfoTab: FC<any> = inject('store')(
 
 const GraphsTab: FC<any> = inject('store')(
   observer(({ selection }) => {
+
+    function pressed(text: string) {
+      console.log(text)
+    };
+
+    const plot_data = [
+      ["2019-01-01",  87],
+      ["2019-02-01",  97],
+      ["2019-03-04",  81],
+      ["2019-04-04",  67],
+      ["2019-05-05",  15],
+      ["2019-06-05",  69],
+      ["2019-07-06",  49],
+      ["2019-08-06",  58],
+      ["2019-09-06",  49],
+      ["2019-10-07",  94],
+      ["2019-11-07",  25],
+      ["2019-12-08",  56],
+      ["2020-01-08",  9],
+      ["2020-02-08",  86],
+      ["2020-04-10",  13],
+      ["2020-05-11",  60],
+      ["2020-06-11",  6],
+      ["2020-07-12",  27],
+      ["2020-08-12",  16],
+      ["2020-09-12",  66],
+      ["2020-11-13",  55],
+      ["2020-12-14",  62],
+      ["2021-01-14",  51],
+      ["2021-02-14",  6],
+      ["2021-03-17",  37],
+      ["2021-04-17",  13],
+      ["2021-06-18",  84],
+      ["2021-07-19",  4],
+      ["2021-08-19",  31],
+      ["2021-09-19",  35],
+      ["2021-10-20",  13],
+      ["2021-11-20",  99],
+      ["2021-12-21",  32],
+      ["2022-01-21",  90],
+      ["2022-02-21",  84],
+      ["2022-03-24",  60],
+      ["2022-04-24",  23],
+      ["2022-05-25",  76],
+      ["2022-06-25",  25],
+      ["2022-07-26",  88],
+      ["2022-08-26",  12],
+      ["2022-09-26",  13],
+      ["2022-10-27",  55],
+      ["2022-11-27",  59],
+      ["2022-12-28",  99]
+    ]
+
+      const data = [
+        {Date: new Date("2013-05-13"), Open: 64.501427, High: 65.414284, Low: 64.500000, Close: 64.962860, Volume: 79237200},
+        {Date: new Date("2013-05-14"), Open: 64.835716, High: 65.028572, Low: 63.164288, Close: 63.408573, Volume: 111779500},
+        {Date: new Date("2013-05-15"), Open: 62.737144, High: 63.000000, Low: 60.337143, Close: 61.264286, Volume: 185403400},
+        {Date: new Date("2013-05-16"), Open: 60.462856, High: 62.549999, Low: 59.842857, Close: 62.082859, Volume: 150801000},
+        {Date: new Date("2013-05-17"), Open: 62.721428, High: 62.869999, Low: 61.572857, Close: 61.894287, Volume: 106976100}
+      ];
+    // const zip = (a: Array<string>, b: Array<number>) => a.map((k, i) => {date:new Date(k); value: b[i]});
+    //
+    // const plot_data2 = zip(plot_data.x, plot_data.y);
+      
+
     return (
       <>
-        <Block name="Graphs">
-          <Elem name="section-tab">
-            <Elem name="section-head">
+        <Block name='Graphs'>
+          <Elem name='section-tab'>
+            <Elem name='section-head'>
 
-              <button onClick={console.log('2Hello World')}>oi2</button>
-              Graphs Pannel
+              <button onClick={pressed('oi')}>oi2</button>
+              graphs pannel
             </Elem>
             <RegionsPanel regions={selection}/>
+            <Plot
+              data={[
+                {
+                  x: plot_data.map((e) => e[0]),
+                  y: plot_data.map((e) => e[1]),
+                  type: 'scatter',
+                  mode: 'lines+markers',
+                  marker: { color: 'red' },
+                },
+              ]}
+              layout={ { title: 'A Fancy Plot' } }
+            />
+            <Graph data={plot_data}/>
           </Elem>
         </Block>
       </>
