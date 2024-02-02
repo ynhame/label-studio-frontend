@@ -185,7 +185,7 @@ export const enterprisePanelDefault: Record<string, PanelBBox> = {
 };
 
 export const openSourcePanelDefault: Record<string, PanelBBox> = {
-  'info-history-graphs': {
+  'info-history-graphs-regions-relations': {
     order: 1,
     top: 0,
     left: 0,
@@ -198,9 +198,9 @@ export const openSourcePanelDefault: Record<string, PanelBBox> = {
     detached: false,
     alignment: Side.right,
     maxHeight: DEFAULT_PANEL_MAX_HEIGHT,
-    panelViews: [panelViews[3], panelViews[1]],
+    panelViews: panelViews //[panelViews[5], panelViews[1]],
   },
-  'regions-relations': {
+  /* 'regions-relations': {
     order: 2,
     top: 0,
     left: 0,
@@ -214,7 +214,7 @@ export const openSourcePanelDefault: Record<string, PanelBBox> = {
     alignment: Side.right,
     maxHeight: DEFAULT_PANEL_MAX_HEIGHT,
     panelViews: [panelViews[0], panelViews[2]],
-  },
+  }, */
 };
 
 export const partialEmptyBaseProps = {
