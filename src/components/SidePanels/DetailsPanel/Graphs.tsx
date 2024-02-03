@@ -12,7 +12,17 @@
     https://www.npmjs.com/package/echarts-for-react
 
   chart options api reference:
-    https://echarts.apache.org/en/option.html#title */
+    https://echarts.apache.org/en/option.html#title
+
+  example with multiple plots:
+    https://echarts.apache.org/examples/en/editor.html?c=candlestick-brush&edit=1&reset=1
+
+  example with confidence band:
+    https://echarts.apache.org/examples/en/editor.html?c=confidence-band
+    
+  TODO: example with multiple plots changing dinamically:
+    https://echarts.apache.org/examples/en/editor.html?c=scatter-nutrients-matrix&reset=1&edit=1
+ */
 
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
