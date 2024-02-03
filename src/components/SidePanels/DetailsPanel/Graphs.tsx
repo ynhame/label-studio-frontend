@@ -1,3 +1,19 @@
+/* usefull links:
+  api documentation:
+    https://echarts.apache.org/en/api.html#echarts
+
+  how to change the plot symbols:
+    https://echarts.apache.org/examples/en/editor.html?c=line-style
+
+  reference plot:
+    https://echarts.apache.org/examples/en/editor.html?c=area-simple
+
+  apache echarts react component:
+    https://www.npmjs.com/package/echarts-for-react
+
+  chart options api reference:
+    https://echarts.apache.org/en/option.html#title */
+
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts';
@@ -16,7 +32,12 @@ _data:{
   data:{
     name: string,
     date:[string],
-    value:[number]
+    values:{
+      Q1: [number],
+      median: [number],
+      Q3: [number],
+      mean: [number],
+    }
   }
 }
 ) => {
@@ -38,6 +59,7 @@ _data:{
   console.log(data.date.map((e) => print_date(new Date(e))));
 
 const options = {
+  animationDuration: false,
   tooltip: {
     trigger: 'axis',
     position: function (pt) {
@@ -79,28 +101,49 @@ const options = {
   ],
   series: [
     {
-      name: data.name,
+      name: 'Q1',
+      data: data.values.Q1,
+      type: 'line',
+      sampling: 'lttb',
+      itemStyle: { color: 'rgb(70, 255, 131)' },
+      lineStyle: { opacity: 0 },
+      stack: 'confidence-band',
+      symbol: 'none',
+    },
+    {
+      name: 'median',
       type: 'line',
       symbol: 'circle',
+      simbolSize: 100,
+      sampling: 'lttb',
+      itemStyle: {
+        color: 'rgb(70, 255, 50)'
+      },
+      lineStyle: { width: 5 },
+      data: data.values.median
+    },
+    {
+      name: 'Q3',
+      data: data.values.Q3,
+      type: 'line',
+      sampling: 'lttb',
+      itemStyle: { color: 'rgb(70, 255, 131)' },
+      lineStyle: { opacity: 0 },
+      areaStyle: { color: 'rgb(70, 255, 131)', opacity: 0.5 },
+      stack: 'confidence-band',
+      symbol: 'none',
+    },
+    /* {
+      name: 'mean',
+      type: 'line',
+      symbol: 'triangle',
       simbolSize: 40,
       sampling: 'lttb',
       itemStyle: {
-        color: 'rgb(70, 255, 131)'
+        color: 'rgb(255, 70, 131)'
       },
-      areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          {
-            offset: 0,
-            color: 'rgb(158, 255, 68)'
-          },
-          {
-            offset: 1,
-            color: 'rgb(70, 255, 131)'
-          }
-        ])
-      },
-      data: data.value
-    }
+      data: data.values.mean
+    } */
   ]
 };
   return <ReactECharts option={options} />;

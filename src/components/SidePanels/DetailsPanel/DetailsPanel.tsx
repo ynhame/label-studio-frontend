@@ -191,7 +191,12 @@ const GraphsTab: FC<any> = inject('store')(
     const data = {
       name: 'NDVI',
       date: plot_data.map(e => e[0]),
-      value: plot_data.map(e => e[1]),
+      values: {
+        Q1: plot_data.map((e) => (e[1] - (Math.random() * 50))),
+        median: plot_data.map((e) => e[1]),
+        mean: plot_data.map((e) => (e[1] + ((Math.random() - 0.5) * 70))),
+        Q3: plot_data.map((e) => (e[1] + Math.random() * 50)),
+        }
     }
 
     // const zip = (a: Array<string>, b: Array<number>) => a.map((k, i) => {date:new Date(k); value: b[i]});
