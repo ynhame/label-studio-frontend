@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Group, Layer, Line, Rect, Stage } from 'react-konva';
+import { Group, Layer, Line, Rect, Stage} from 'react-konva';
 import { observer } from 'mobx-react';
 import { getEnv, getRoot, isAlive } from 'mobx-state-tree';
 
@@ -82,7 +82,7 @@ const Region = memo(({ region, showSelected = false }) => {
 
 const RegionsLayer = memo(({ regions, name, useLayers, showSelected = false }) => {
   const content = regions.map((el) => (
-    <Region key={`region-${el.id}`} region={el} showSelected={showSelected} />
+    <Region key={`region-${el.id}`} region={el} showSelected={showSelected} off="click"/>
   ));
 
   return useLayers === false ? (
@@ -108,6 +108,22 @@ const Regions = memo(({ regions, useLayers = true, chunkSize = 15, suggestion = 
       ))}
     </ImageViewProvider>
   );
+});
+
+const Car_Regions = memo(({ car_regions }) => {
+  // https://konvajs.org/docs/react/Shapes.html#sidebar
+  const lines = car_regions.map((region) => (
+      <Line
+        x={0} y={0} // offset
+        points={region} // coords of the polygon
+        // fill={'orange'} // fill color
+        opacity={1} // opacity of the color and the stroke
+        stroke={'#cc8110'}
+        strokeWidth={4}
+        closed
+      />
+  ));
+  return <Layer>{lines}</Layer>
 });
 
 const DrawingRegion = observer(({ item }) => {
@@ -1210,6 +1226,15 @@ const StageContent = observer(({
     suggestedShape: suggestedShapeRegions,
   });
 
+  const [drawCarPolygons, setDrawCarPolygons]  = useState(false)
+    //polygonos de teste
+  const car_regions = [
+      [23, 20, 23, 160, 70, 93, 150, 109, 290, 139, 270, 93],
+      [160, 70, 93, 150, 109, 290, 139, 270, 93, 23],
+    ]
+  store.toggleCarPolygons = () => {
+    setDrawCarPolygons(!drawCarPolygons)
+  }
   return (
     <>
       {/* Hack to keep stage in place when there's no regions */}
@@ -1229,15 +1254,23 @@ const StageContent = observer(({
       {renderableRegions.map(([groupName, list]) => {
         const isBrush = groupName.match(/brush/i) !== null;
         const isSuggestion = groupName.match('suggested') !== null;
+            // key={groupName}
+            // name={groupName}
+            // regions={list}
 
+          {
+          drawCarPolygons
+            ? <Car_Regions car_regions={car_regions} />
+            : <></>
+          }
         return list.length > 0 ? (
-          <Regions
-            key={groupName}
-            name={groupName}
-            regions={list}
-            useLayers={isBrush === false}
-            suggestion={isSuggestion}
-          />
+            <Regions
+              key={groupName}
+              name={groupName}
+              regions={list}
+              useLayers={isBrush === false}
+              suggestion={false}
+            />
         ) : <Fragment key={groupName} />;
       })}
       <Selection

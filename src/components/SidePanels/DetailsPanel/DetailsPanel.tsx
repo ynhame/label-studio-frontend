@@ -10,7 +10,7 @@ import { RegionDetailsMain, RegionDetailsMeta } from './RegionDetails';
 import { RegionItem } from './RegionItem';
 import { Relations as RelationsComponent } from './Relations';
 import Graph from './Graphs'
-import Plot from 'react-plotly.js';
+import Toggle from '../../../common/Toggle/Toggle';
 
 // eslint-disable-next-line
 // @ts-ignore
@@ -117,7 +117,11 @@ const HistoryTab: FC<any> = inject('store')(observer(({ store, currentEntity }) 
 
 
 const InfoTab: FC<any> = inject('store')(
-  observer(({ selection }) => {
+  observer(({store, selection }) => {
+    function togle(){
+      store.toggleCarPolygons()
+      console.log('to rodando')
+    }
     return (
       <>
         <Block name="info">
@@ -126,6 +130,14 @@ const InfoTab: FC<any> = inject('store')(
               Selection Details
             </Elem>
             <RegionsPanel regions={selection}/>
+              <Toggle
+                className={'PolyCar'}
+                label={'poligonos do CAR'}
+                description={'habilitar ou desabilitar a visualização dos poligonos do CAR'}
+                checked={false}
+                defaultChecked={false}
+                onChange={togle}
+              />
           </Elem>
         </Block>
       </>
@@ -192,10 +204,10 @@ const GraphsTab: FC<any> = inject('store')(
       name: 'NDVI',
       date: plot_data.map(e => e[0]),
       values: {
-        Q1: plot_data.map((e) => (e[1] - (Math.random() * 50))),
+        Q1: plot_data.map((e) => (e[1] - (100 + Math.random() * 50))),
         median: plot_data.map((e) => e[1]),
         mean: plot_data.map((e) => (e[1] + ((Math.random() - 0.5) * 70))),
-        Q3: plot_data.map((e) => (e[1] + Math.random() * 50)),
+        Q3: plot_data.map((e) => (e[1] + 100 + Math.random() * 30)),
         }
     }
 

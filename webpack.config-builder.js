@@ -298,6 +298,17 @@ module.exports = ({ withDevServer = true } = {}) => ({
       path: false,
       crypto: false,
       worker_threads: false,
+      vm: false,
+      querystring: false,
+      os: false,
+      stream: false,
+      constants: false,
+      tty: false,
+      child_process: false,
+      https: require.resolve("https-browserify"),
+      http: require.resolve("stream-http"),
+      zlib: require.resolve("browserify-zlib"),
+      util: require.resolve("util/")
     }
   },
   plugins: withDevServer ? [

@@ -1,14 +1,24 @@
+import useMeasure from 'react-use-measure'
 import { inject, observer } from 'mobx-react';
+import { useCallback, useMemo, useState } from 'react';
+import { IconBan } from '../../assets/icons';
+import { LsChevron } from '../../assets/icons';
 import { Button } from '../../common/Button/Button';
+import { Dropdown } from '../../common/Dropdown/DropdownComponent';
 import { Tooltip } from '../../common/Tooltip/Tooltip';
 import { Block, Elem } from '../../utils/bem';
-import { isDefined } from '../../utils/utilities';
-import { IconBan } from '../../assets/icons';
 import { FF_PROD_E_111, isFF } from '../../utils/feature-flags';
+import { isDefined } from '../../utils/utilities';
 import './Controls.styl';
-import { useCallback, useMemo, useState } from 'react';
-import { LsChevron } from '../../assets/icons';
-import { Dropdown } from '../../common/Dropdown/DropdownComponent';
+
+import { Modal, Select} from 'antd';
+import {Stage, Layer, Rect, Line, Image} from 'react-konva';
+import  * as ImageView from '../ImageView/ImageView';
+import useImage from 'use-image';
+import { container } from 'webpack';
+
+// the first very simple and recommended way:
+
 
 const TOOLTIP_DELAY = 0.8;
 
@@ -30,6 +40,139 @@ const controlsInjector = inject(({ store }) => {
     history: store?.annotationStore?.selected?.history,
   };
 });
+
+const SegmentatorArea = ({imgSrc, col, polyCoords, zoom, containerSize}) => {
+
+    const [image] = useImage(imgSrc);
+  const SIZE = Math.floor(containerSize*3/7)
+
+    let scaleFactor = 1;
+
+    if (image) {
+      if (image.naturalWidth > image.naturalHeight){
+        scaleFactor = SIZE/image.naturalWidth
+      } else {
+        scaleFactor = SIZE/image.naturalHeight
+      }
+      console.log(image)
+      console.log(image.naturalWidth)
+      console.log(image.naturalHeight)
+    console.log(polyCoords)
+    }
+
+  const [ref, bounds] = useMeasure()
+
+  if (zoom) {
+    
+  }
+
+  return (
+          <>
+{/*          <img
+            src={imgSrc}
+            alt={"lala"} 
+            style={{
+              width: "100%",
+              height: "100%",
+              gridColumnStart: col,
+              gridColumnEnd: col,
+              gridRowStart: 1,
+              gridRowEnd: 1,
+              zIndex: 1,
+            }}
+          />
+              <div
+            style={{
+              width: "100%",
+              height: "100%",
+              gridColumnStart: col,
+              gridColumnEnd: col,
+              gridRowStart: 1,
+              gridRowEnd: 1,
+              zIndex: 2,
+            }}
+            ref={ref}
+          >
+              <Stage width={bounds.width} height={bounds.height}>
+*/}
+              <Stage width={SIZE} height={SIZE} scaleX={scaleFactor} scaleY={scaleFactor}>
+                  <Layer>
+                    <Image image={image}/>
+                  </Layer>
+                  {
+                    polyCoords ?
+                    <Layer>
+                      {polyCoords.map(poly => <Line x={0} y={0} closed stroke="black" strokeWidth={50}
+                            points={poly.points.flatMap(point => [
+                              point.x/poly.canvasSize.width,
+                              point.y/poly.canvasSize.height
+                            ])}
+                          />
+                      ) }
+                    </Layer> :
+                    <></>
+                  }
+              </Stage>
+{/*          </div>*/}
+    </>
+    
+  )
+}
+
+const Segmentator = ({show, imgSrc, polyCoords}) => {
+
+  const MODALSIZE = 1000
+
+
+  function handleOk() {
+    show.setter(false);
+    // store.updateAnnotation = false
+  };
+
+  function handleCancel() {
+    show.setter(false);
+    // store.updateAnnotation = false
+  };
+
+  return (
+      <Modal title="Basic Modal" open={show.state} onOk={handleOk} onCancel={handleCancel} width={1000}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "3fr 3fr 1fr",
+          gridTemplateRows: "1fr"
+        }}>
+        <SegmentatorArea image={imgSrc} col={1} polyCoords={polyCoords} />
+        <SegmentatorArea image={imgSrc} col={2} polyCoords={polyCoords} />
+        <Select
+          defaultValue="lucy"
+          style={{
+            width: 90,
+            height: "100%",
+            gridColumnStart: 3,
+            gridColumnEnd: 3,
+            gridRowStart: 1,
+            gridRowEnd: 1,
+          }}
+          // onChange={handleChange}
+          options={[
+            {
+              value: 'jack',
+              label: 'Jack',
+            },
+            {
+              value: 'lucy',
+              label: 'Lucy',
+            },
+            {
+              value: 'Yiminghe',
+              label: 'yiminghe',
+            },
+          ]}
+        />
+        </div>
+      </Modal>
+  )
+}
 
 export const Controls = controlsInjector(observer(({ store, history, annotation }) => {
   const isReview = store.hasInterface('review');
@@ -159,6 +302,7 @@ export const Controls = controlsInjector(observer(({ store, history, annotation 
             name="submit-option"
             look="secondary"
             onClick={async (event) => {
+              console.log("testando o butao 1")
               event.preventDefault();
               
               const selected = store.annotationStore?.selected;
@@ -198,6 +342,7 @@ export const Controls = controlsInjector(observer(({ store, history, annotation 
                 look={look}
                 mod={{ has_icon: useExitOption, disabled: isDisabled }}
                 onClick={async (event) => {
+              console.log("testando o butao 2")
                   if (event.target.classList.contains('lsf-dropdown__trigger')) return;  
                   const selected = store.annotationStore?.selected;
 
@@ -234,6 +379,7 @@ export const Controls = controlsInjector(observer(({ store, history, annotation 
               look={look}
               mod={{ has_icon: useExitOption, disabled: isDisabled }}
               onClick={async (event) => {
+              console.log("testando o butao 3")
                 if (event.target.classList.contains('lsf-dropdown__trigger')) return;
                 const selected = store.annotationStore?.selected;
 
@@ -269,6 +415,7 @@ export const Controls = controlsInjector(observer(({ store, history, annotation 
           <ButtonTooltip key="submit" title={title}>
             <Elem name="tooltip-wrapper">
               <Button aria-label="submit" disabled={disabled || submitDisabled} look={look} onClick={async () => {
+              console.log("testando o butao 4")
                 const selected = store.annotationStore?.selected;
 
                 selected?.submissionInProgress();
@@ -287,6 +434,7 @@ export const Controls = controlsInjector(observer(({ store, history, annotation 
         const button = (
           <ButtonTooltip key="update" title="Update this task: [ Alt+Enter ]">
             <Button aria-label="submit" disabled={disabled || submitDisabled} look={look} onClick={async () => {
+              console.log("testando o butao 5")
               const selected = store.annotationStore?.selected;
 
               selected?.submissionInProgress();
@@ -300,12 +448,79 @@ export const Controls = controlsInjector(observer(({ store, history, annotation 
   
         buttons.push(button);
       }  
+
+
+      store.updateAnnotation = false
+
+      buttons.push(
+        <ButtonTooltip key="submit" title={'Classificar'}>
+          <Elem name="tooltip-wrapper">
+            <Button aria-label="classificar" disabled={false} look={look} onClick={async () => {
+            console.log("testando o butao 4")
+              const selected = store.annotationStore?.selected;
+              showModal()
+
+              selected?.submissionInProgress();
+              await store.commentStore.commentFormSubmit();
+              store.submitAnnotation();
+            }}>
+              lalala
+            </Button>
+          </Elem>
+        </ButtonTooltip>,
+      );
     }
   }
+
+  const [modalState, setModalState] = useState(false)
+  const [polyCoords, setPolyCoords] = useState(null)
+
+  // const isModalOpen = (state) =>  {
+  //   store.updateAnnotation = state
+  // }
+  function showModal() {
+    // store.updateAnnotation = true
+    setModalState(true);
+    console.log("testando o show modal")
+    const canvasSize = store
+      .annotationStore
+      .selected
+      .objects[0]
+      .canvasSize
+    console.log(canvasSize)
+    setPolyCoords(
+      store
+      .annotationStore
+      .annotations
+      .filter(e => e.selected)[0]
+      .regions.map(f => {
+            return {
+              points: f.points.map(g => {
+                return {
+                  x: g.x,
+                  y: g.y,
+                  canvasX: g.canvasX,
+                  canvasY: g.canvasY,
+                  relX: g.relativeX,
+                  relY: g.relativeY,
+              }}),
+              canvasSize: canvasSize
+      }})
+    )
+    console.log(store.task)
+
+    console.log(polyCoords)
+  };
 
   return (
     <Block name="controls">
       {buttons}
+    <Segmentator
+      show={{state: modalState, setter: setModalState}}
+      imgSrc={store.task.dataObj.image}
+      polyCoords={polyCoords}
+    />
     </Block>
   );
 }));
+
